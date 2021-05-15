@@ -13,14 +13,13 @@ public class QuestionModel {
     @Id
     private String questionId;
 
-    @NotNull(message = "You must insert number of question collection!")
-    private int questionCollection;
+    private String collectionName;
     @NotNull(message = "You must enter the Question content!")
     private String questionContent;
     @NotNull(message = "You must enter Correct Answer!")
     private String correctAnswer;
     @NotNull(message = "You must enter other answers!")
-    @MaxListSize(message = "You must enter three answers")
+    @MaxListSize(message = "You must enter three other answers")
     private List<String> otherAnswers; //3
 
 
@@ -30,14 +29,6 @@ public class QuestionModel {
 
     public void setQuestionId(String questionId) {
         this.questionId = questionId;
-    }
-
-    public int getQuestionCollection() {
-        return questionCollection;
-    }
-
-    public void setQuestionCollection(int questionCollection) {
-        this.questionCollection = questionCollection;
     }
 
     public String getQuestionContent() {
@@ -64,19 +55,29 @@ public class QuestionModel {
         this.otherAnswers = otherAnswers;
     }
 
+    public String getCollectionName() {
+        return collectionName;
+    }
+
+    public void setCollectionName(String collectionName) {
+        this.collectionName = collectionName;
+    }
+
     @Override
     public String toString() {
-        return "QuestionModel{" +
-                "questionId='" + questionId + '\'' +
-                ", questionCollection=" + questionCollection +
+        return "{" +
+                "collectionName='" + collectionName + '\'' +
                 ", questionContent='" + questionContent + '\'' +
                 ", correctAnswer='" + correctAnswer + '\'' +
                 ", otherAnswers=" + otherAnswers +
                 '}';
     }
 
-    public QuestionModel(int questionCollection, String questionContent, String correctAnswer, List<String> otherAnswers) {
-        this.questionCollection = questionCollection;
+    public QuestionModel() {
+    }
+
+    public QuestionModel(String collectionName, String questionContent, String correctAnswer, List<String> otherAnswers) {
+        this.collectionName = collectionName;
         this.questionContent = questionContent;
         this.correctAnswer = correctAnswer;
         this.otherAnswers = otherAnswers;

@@ -32,12 +32,14 @@ public class UserApi {
     @PostMapping("/register")
     @PreAuthorize("permitAll()")
     public ResponseEntity<String> registerUser(@RequestBody @Valid UserRegisterModel userRegisterModel, Errors errors){
+
+
         if (errors.hasErrors()){
             return ResponseEntity.badRequest().body(errors.toString());
         } else {
 
             if (userRegisterModel.getPassword().equals(userRegisterModel.getRetypedPassword())){
-                if ( userManager.findUserByUsername(userRegisterModel.getUsername()) == null ){
+                if (userManager.findUserByUsername(userRegisterModel.getUsername()).isEmpty()){
                     UserModel userModel = new UserModel(
                             userRegisterModel.getUsername(),
                             passwordEncoder.encode(userRegisterModel.getPassword()) ,
@@ -82,7 +84,7 @@ public class UserApi {
     @DeleteMapping("/{username}/delete")
     @PreAuthorize("hasAuthority('user:write')")
     public ResponseEntity<String> deleteUser(@PathVariable(name = "username") String username ){
-        if (userManager.findUserByUsername(username) == null){
+        if (!userManager.findUserByUsername(username).isPresent()){
             return ResponseEntity.ok().body(String.format("User %s does not exist", username));
         } else {
             userManager.deleteUser(username);
