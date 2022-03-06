@@ -41,8 +41,8 @@ public class QuestionManager {
         repository.save(question);
     }
 
-    public QuestionModel getRandomQuestion(String questionCollection){
-        List<QuestionModel> questions = findAllQuestionsByCollection(questionCollection);
+    public QuestionModel getRandomQuestion(){
+        List<QuestionModel> questions = repository.findAll();
         if (!questions.isEmpty()){
             Random random = new Random();
             int questionNumber = random.nextInt(questions.size());
@@ -60,4 +60,15 @@ public class QuestionManager {
             return false;
         }
     }
+
+    public boolean doesSameQuestionExist(QuestionModel questionModel){
+        List<QuestionModel> questions = repository.getAllByQuestionContentAndCollectionName(questionModel.getQuestionContent(), questionModel.getCollectionName()) ;
+        if (questions.isEmpty()) {
+            return false;
+        } else {
+            return true ;
+        }
+
+    }
+
 }

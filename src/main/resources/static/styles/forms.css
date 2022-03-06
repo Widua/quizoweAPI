@@ -1,0 +1,37 @@
+input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+.functions{
+    font-size: 25px;
+    text-align: center;
+}
+
+.warning{
+    color: red;
+    font-weight: bold;
+}
+
+.check{
+    background-color: lightslategray;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 45%;
+}
+
+.code{
+    margin-top: 10px;
+    background-color: black;
+    padding: 15px;
+    width: 100%;
+    color: white;
+    border-radius: 15px;
+}

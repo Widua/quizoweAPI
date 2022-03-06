@@ -59,5 +59,13 @@ public class UserManager  {
         }
     }
 
+    public boolean doesAnyAccountExist(){
+        if (repository.findAll().isEmpty()){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
 }

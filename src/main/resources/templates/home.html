@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Instrukcja obslugi gotowego do implementacji API</title>
+    <link th:href="@{/styles/style.css}" rel="stylesheet" />
+    <link th:href="@{/styles/articles.css}" rel="stylesheet" />
+</head>
+<body>
+
+<nav>
+<ul>
+    <li> <a href="/">Strona główna</a> </li>
+    <li> <a href="/documentation">Dokumentacja API</a>  </li>
+    <li> <a href="/test">Przetestuj API</a>  </li>
+    <li> <a href="/about"> O projekcie </a>  </li>
+</ul>
+
+</nav>
+
+<article>
+
+    <h3> Co to za miejsce? </h3>
+    <p>
+        Jest to prowizoryczna strona startowa tylko dla ciebie, developera, który postanowił wykorzystać
+        to API do swojego projektu, znajdziesz tutaj kompleksowe informacje w tym pełną dokumentację projektu,
+         podstronę do testowania niektórych funkcji API(Tworzenie użytkowników, autoryzacja i tworzenie tokenu logowania, tworzenie pytania do
+        quizu oraz losowanie pytania ) oraz informacje o pomyśle na projekt i technologiach w nim wykorzystanych.
+
+    </p>
+</article>
+
+<article>
+    <h3> Jak się tu poruszać? </h3>
+    <p>
+        U samej góry strony zawsze masz menu, w którym znajdziesz 5 pozycji
+        <br>
+        Menu główne jest to miejsce, w którym obecnie się znajdujesz
+        <br>
+        Dokumentacja API zawiera całkowitą dokumentację dotyczącą tego, jak z API korzystać, jakie są endpointy dla każdego możliwego działania.
+        <br>
+        Przetestuj API jest to podstrona, która umożliwia ci bez skonfigurowanego narzędzia np. postmana sprawdzić najważniejsze funkcje API, czyli rejestracja użytkowników,
+        tworzenie pytań do quizu, oraz losowanie pytań.
+        <br>
+        O projekcie zawiera informacje na temat pomysłu na projekt, dalszych planów jego rozwoju, oraz wykorzystanych technologii webowych i nie tylko.
+
+    </p>
+
+</article>
+
+
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>O projekcie</title>
+    <link th:href="@{/styles/style.css}" rel="stylesheet" />
+    <link th:href="@{/styles/articles.css}" rel="stylesheet" />
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li> <a href="/">Strona główna</a> </li>
+        <li> <a href="/documentation">Dokumentacja API</a>  </li>
+        <li> <a href="/test">Przetestuj API</a>  </li>
+        <li> <a href="/about"> O projekcie </a>  </li>
+    </ul>
+
+</nav>
+
+<section id="about">
+    <h1> Quizowe API </h1>
+    <article>
+        <h3>Pomysł na projekt</h3>
+        <p>
+            Na pomysł projektu wpadłem gdy usłyszałem o międzyszkolnym festiwalu informatycznym "projekt na szóstkę",
+            postanowiłem że zrobię coś co będzie łączyło prawie każdy typ projektu,
+            czyli API bez którego zarówno strona internetowa, aplikacja mobilna jak i część aplikacji desktopowych nie może w pełni funkcjonować.
+            A więc swego rodzaju łącznik dla każdego typu aplikacji z serwerem i bazą danych, z pomocą tego każdy użytkownik internetu który pobierze ten program,
+            może uruchomić ten serwer, a następnie podpiąć go do własnego projektu np. Strony internetowej czy Aplikacji mobilnej.
+            <br>
+            W przyszłości chciałbym też uczynić ten program projektem opensource, ponieważ sam korzystam z wielu takich na codzień, i uważam że opensource to przyszłość!
+        </p>
+    </article>
+
+    <article>
+        <h3> Wybór technologii </h3>
+        <p>
+            W wyborze technologii przede wszystkim myślałem o tym, aby projekt działał na każdym urządzeniu,
+            dlatego wybrałem Javę która jest do uruchomienia tak samo na Windowsie jak i na Linuxie oraz MacOS.
+            Do zarządzania API wybrałem technologię Java Spring, która jest javovym frameworkiem do backendu webowego, wykorzystałem takie komponenty jak:
+            Spring Data, Spring Security, Spring Web, Spring-MongoDB, Spring Validation
+            <br>
+            Jako bazę danych wybrałem MongoDB, która jest nierelacyjną bazą danych opartą na JSONie,
+            ponieważ jest prostsza w obsłudze w porównaniu do np. MySQL czy PostgreSQL co spełnia ideę projektu, czyli to aby każdy użytkownik internetu mógł bez problemu
+            API obsłużyć i zaimplementować w swoim projekcie.
+            <br>
+            Do stworzenia tej małej dokumentacyjno-poradnikowej strony użyłem technologii Thymeleaf, która zapewnia proste w obsłudze obsługujące HTML5 funkcje.
+            Wizualna część strony została wykonana w HTML5 oraz CSS, do podstrony umozliwiającej testowanie API wykorzystałem język JavaScript.
+            <br>
+            Hasła użytkownikow są hashowane za pomocą algorytmu BCRYPT, przez co hasło jest ciężej złamać.
+        </p>
+    </article>
+
+</section>
+
+</body>
+</html>

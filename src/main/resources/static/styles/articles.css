@@ -1,0 +1,25 @@
+h1{
+    text-align: center;
+}
+
+article{
+    padding: 50px;
+    background-color: dimgray;
+    border: 2px solid dimgray;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+article > h3{
+    color: whitesmoke;
+}
+
+article > h4{
+    color: ghostwhite;
+}
+
+.endpoints{
+    color: ghostwhite;
+    font-weight: bold;
+    font-style: italic;
+}

@@ -12,6 +12,8 @@ public interface QuestionRepository extends MongoRepository<QuestionModel,String
 
     @Query(value = "{'collectionName':?0}", collation = "{locale: 'en', strength: 2}")
     List<QuestionModel> getAllByCollectionName(String questionCollection);
+    List<QuestionModel> findAll();
+    List<QuestionModel> getAllByQuestionContentAndCollectionName(String questionName , String collectionName) ;
 
 
 }

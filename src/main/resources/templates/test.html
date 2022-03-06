@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Przetestuj API</title>
+    <link th:href="@{/styles/style.css}" rel="stylesheet" />
+    <link th:href="@{/styles/articles.css}" rel="stylesheet" />
+    <link th:href="@{/styles/forms.css}" rel="stylesheet" />
+
+    <script th:inline="javascript">
+        function addUserClicked(){
+            const form = document.getElementById("addUser");
+
+            const user = {
+                username:form.elements['username'].value,
+                password:form.elements['password'].value,
+                retypedPassword:form.elements['retypedPassword'].value
+            }
+            const fetchOptions = {
+                method: 'POST',
+                body: JSON.stringify(user),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            const url = "http://localhost:8080/user/register" ;
+            fetch( url , fetchOptions )
+            .then( res => res.json() )
+            .then( data => document.getElementById("addUserServerResponse").innerHTML = JSON.stringify(data) ) ;
+
+
+            document.getElementById("addUserJsonObject").innerHTML = JSON.stringify(user) ;
+            document.getElementById("addUserFetchSetting").innerHTML = JSON.stringify(fetchOptions) ;
+        }
+        function generateLoginCode(){
+            const form = document.getElementById("login");
+            let uname = form.elements['uname'].value ;
+            let pword = form.elements['pword'].value ;
+            let token = 'Basic '+btoa(uname+":"+pword) ;
+
+            document.getElementById("loginCode").innerHTML = token ;
+        }
+        function addQuestion(){
+            const form = document.getElementById("addQuestion") ;
+
+            let question = {
+                collectionName: form.elements['collectionName'].value,
+                questionContent: form.elements['question'].value,
+                correctAnswer: form.elements['answer'].value,
+                otherAnswers: [form.elements['answer2'].value, form.elements['answer3'].value, form.elements['answer4'].value]
+            }
+
+            const fetchOptions = {
+                method: 'POST',
+                body: JSON.stringify(question),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':form.elements['authCode'].value
+                }
+            }
+
+            const url = "http://localhost:8080/api/add" ;
+
+            fetch( url , fetchOptions )
+            .then( res => res.json())
+            .then( data => document.getElementById("response").innerHTML = JSON.stringify(data) ) ;
+
+            document.getElementById("questionObj").innerHTML = JSON.stringify(question) ;
+        }
+        function randomQuestion(){
+            const form = document.getElementById("random") ;
+            const fetchOptions = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':form.elements['code'].value
+                }
+            }
+            let url = "http://localhost:8080/api/randomQuestion"
+
+            fetch( url , fetchOptions )
+            .then( res => res.json() )
+            .then( data => document.getElementById("randomQuestion").innerHTML = JSON.stringify(data) )
+        }
+
+
+    </script>
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li> <a href="/">Strona główna</a> </li>
+        <li> <a href="/documentation">Dokumentacja API</a>  </li>
+        <li> <a href="/test">Przetestuj API</a>  </li>
+        <li> <a href="/about"> O projekcie </a>  </li>
+    </ul>
+
+</nav>
+    <h3> Zarządzanie użytkownikami </h3>
+<article>
+    <p class="functions"> Rejestracja użytkownika </p>
+    <p class="warning"> PAMIĘTAJ!!! Pierwszy utworzony użytkownik dostanie rangę Administrator, więc pamiętaj hasło, jak skończysz testować najlepiej zresetuj bazę danych. </p>
+    <form id="addUser">
+        <label for="username"> Nazwa użytkownika </label>
+        <input type="text" name="username" id="username">
+        <br>
+        <label for="password"> Hasło </label>
+        <input type="password" name="password" id="password">
+        <br>
+        <label for="retypedPassword"> Powtórz hasło </label>
+        <input type="password" name="retypedPassword" id="retypedPassword">
+    </form>
+    <button class="check" onclick="addUserClicked()"> Sprawdź działanie </button>
+
+    <div class="code">
+        <p> Obiekt JSON rejestrowanego użytkownika: </p>
+        <p id="addUserJsonObject">  </p>
+        <p> Ustawienia połączenia z bazą danych:  </p>
+        <p id="addUserFetchSetting">   </p>
+        <p> Odpowiedź serwera: </p>
+        <p id="addUserServerResponse">  </p>
+    </div>
+
+</article>
+
+<article>
+    <p class="functions"> Generowanie kodu logowania </p>
+    <p class="warning"> To tylko generuje kod logowania, kod ten jest potrzebny w funkcjach API wymagających logowania użytkownika,
+        czyli we wszystkich oprócz rejestracji, twoja aplikacja będzie musiała coś takiego wygenerować samemu.
+        Nie sprawdza poprawności logowania, tylko generuje kod</p>
+    <form id="login">
+        <label for="uname"> Nazwa użytkownika </label>
+        <input type="text" id="uname" name="uname">
+        <label for="pword"> Hasło </label>
+        <input type="password" id="pword" name="pword">
+    </form>
+        <button class="check" onclick="generateLoginCode()"> Wygeneruj kod logowania </button>
+
+    <div class="code">
+        <p> Twój kod logowania dla podanych danych użytkownika: </p>
+        <p id="loginCode">   </p>
+    </div>
+</article>
+
+<h3> Pytania </h3>
+
+<article>
+    <p class="functions"> Dodawanie pytania do Quizu </p>
+    <form id="addQuestion">
+
+        <label for="authCode"> Kod logowania </label>
+        <input type="text" name="authCode" id="authCode">
+
+    <label for="collectionName"> Nazwa Quizu </label>
+    <input type="text" name="collectionName" id="collectionName">
+
+    <label for="question"> Pytanie Quizu </label>
+    <input type="text" name="question" id="question">
+
+    <label for="answer"> Poprawna odpowiedź </label>
+    <input type="text" name="answer" id="answer">
+
+    <label for="answer2"> Inna odpowiedź </label>
+    <input type="text" name="answer2" id="answer2">
+
+    <label for="answer3"> Inna odpowiedź </label>
+    <input type="text" name="answer3" id="answer3">
+
+    <label for="answer4"> Inna odpowiedź </label>
+    <input type="text" name="answer4" id="answer4">
+
+    </form>
+     <button class="check" onclick="addQuestion()"> Dodaj pytanie </button>
+
+    <div class="code">
+        <p> Obiekt pytania: </p>
+        <p id="questionObj"></p>
+        <p> Odpowiedź z serwera: </p>
+        <p id="response">  </p>
+    </div>
+
+</article>
+
+<article>
+    <p class="functions"> Losowanie pytania z Quizów </p>
+    <form id="random">
+    <label for="code"> Podaj kod logowania: </label>
+    <input type="text" id="code" name="code">
+    </form>
+
+    <button class="check" onclick="randomQuestion()">  Wylosuj pytanie  </button>
+
+    <div class="code">
+        <p> Odpowiedź serwera: </p>
+        <p id="randomQuestion">  </p>
+    </div>
+
+
+</article>
+
+
+
+
+</body>
+</html>

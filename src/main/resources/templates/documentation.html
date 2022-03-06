@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dokumentacja API</title>
+    <link th:href="@{/styles/style.css}" rel="stylesheet" />
+    <link th:href="@{/styles/articles.css}" rel="stylesheet" />
+    <link th:href="@{/styles/forms.css}" rel="stylesheet" />
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li> <a href="/">Strona główna</a> </li>
+        <li> <a href="/documentation">Dokumentacja API</a>  </li>
+        <li> <a href="/test">Przetestuj API</a>  </li>
+        <li> <a href="/about"> O projekcie </a>  </li>
+    </ul>
+
+</nav>
+
+<article>
+    <h3> Wymagania techniczne </h3>
+    <p> Domyślnie aplikacja do poprawnego działania wymaga zainstalowanego na localhoscie serwera MongoDB działającego na porcie 27017, w standardowych ustawieniach (brak hasła) </p>
+    <p> Preferowana wersja Javy dla aplikacji to 16.0.1 </p>
+    <p> System operacyjny dowolny, Windows, Linux, MacOS (Testowane na Arch Linux, kernel 5.16.10-arch1-1 ) </p>
+</article>
+
+<article>
+    <h3> Struktura odpowiedzi ze strony serwera </h3>
+
+    <p>
+        Serwer odpowiada na żądanie wysyłając responseBody, które wygląda następująco:
+    </p>
+
+    <div class="code">
+        { <br>
+        status:[Status HTTP], <br>
+        message:[Wiadomość zwrotna], <br>
+        optional:[Opcjonalny obiekt] <br>
+        }
+    </div>
+    <p> Opcjonalny obiekt zwraca się w niektórych przypadkach i zawiera on żądany obiekt, jeśli takiego żądamy. </p>
+
+
+</article>
+
+<article>
+    <h3> Zarządzanie użytkownikami </h3>
+    <p> Całe api do zarządzania użytkownikami znajdziemy na ścieżce /user/, pełny adres: <span class="endpoints"> localhost:8080/user/{nazwa endpointu} </span> </p>
+
+    <h4> Rangi użytkowników i ich uprawnienia</h4>
+    <p>
+        Najważniejszą rangą jest Administrator, jest ona nadawana pierwszemu zarejestrowanemu użytkownikowi, dzięki czemu obsługując API nie musisz zmieniać ustawień w bazie danych
+        żeby twój pierwszy stworzony użytkownik miał najwyższą rangę. Ranga posiada uprawnienia takie jak: question:read, question:write, user:write. Czyli administrator może wszystko
+        od Tworzenia, modyfikowania i przeglądania pytań aż po edycję, użytkowników.
+    </p>
+
+    <p>
+        Kolejną w Hierarchii rangą jest ranga quizAdmin, może być ona nadana tylko przez promocję, posiada ona uprawnienia: question:read, question:write, a więc może dodawać,
+        usuwać, przeglądać, modyfikować pytania w Quizie, nie może nic zmieniać w przypadku użytkowników.
+
+    </p>
+
+    <p>
+        Najniżej w hierarchii znajduje się ranga User, która posiada tylko uprawnienie question:read, a więc może tylko brać pytania z bazy danych. Ranga ta jest nadawana
+        automatycznie w każdym kolejnym tworzonym użytkowniku po administratorze.
+    </p>
+
+
+    <h4> Rejestracja użytkownika </h4>
+    <p> Endpoint do rejestracji użytkownika to: /register, cała ścieżka: <span class="endpoints"> localhost:8080/user/register </span> </p>
+    <p> Jest to jedyny endpoint w API który nie wymaga posiadania konta użytkownika </p>
+    <p> Metoda HTTP ktorą należy wysłać żądanie jest metoda POST, jako body wysyłamy UserRegisterModel, który wygląda następująco: </p>
+    <div class="code">
+        <p>
+            {
+        <br>
+        username:[nazwa użytkownika], <br>
+        password:[hasło], <br>
+        retypedPassword:[powtórzone hasło]<br>
+            }
+        </p>
+    </div>
+
+    <h4>
+        Sposób autoryzacji i uwierzytelniania użytkowników:
+    </h4>
+    <p>
+        Logowanie do API odbywa się za pomocą systemu BasicHTTP, do żądania w którym chcesz użyć konta użytkownika musisz dodać nagłówek(header)
+        "Authorization" a jako wartość wysyłasz: "Basic [nazwa_uzytkownika:hasło]", wartość po słowie kluczowym Basic musi być zaszyfrowana za pomocą
+        szyfru Base64, przykładowy nagłówek dla nazwy użytkownika "widua" i hasła: "0000" powinien wyglądać tak:
+        <div class="code">
+            <p>
+               {<br>
+                "Authorization":"Basic d2lkdWE6MDAwMA==" <br>
+                }
+            </p>
+        </div>
+    </p>
+
+    <h4> Zmiana rangi użytkownika </h4>
+    <p> Aby zmienić rangę użytkownika musisz wejść na endpoint /promote, cała ścieżka <span class="endpoints"> localhost:8080/user/{nazwa_użytkownika}/promote?roleName={nazwa_rangi} </span> </p>
+    <p> Żądanie to wymaga rangi administratora, możliwe roleName to: USER , QUIZADMIN, ADMINISTRATOR. Parametry te zostaną przyjęte niezależnie od wielkości liter
+    można wysłać nawet żądanie rangi AdMiNiStRatOr, działa na metodzie HTTP PUT</p>
+
+    <h4> Usuwanie użytkownika </h4>
+    <p> Aby usunąć użytkownika z bazy danych, musisz wejść na endpoint /delete, cała śceżka <span class="endpoints"> localhost:8080/user/{nazwa_użytkownika}/delete </span> </p>
+    <p> Żądanie to wymaga rangi administratora, działa na metodzie HTTP DELETE</p>
+
+    <h4> Zmiana hasła</h4>
+    <p> Aby zmienić użytkownikowi hasło musisz wejśc na endpoint /passwordChg, cała ścieżka <span class="endpoints"> localhost:8080/user/{nazwa_użytkownika}/passwordChg </span> </p>
+    <p> Żądanie to wymaga rangi administratora, działa na metodzie HTTP PUT</p>
+
+    <h4> Zalecenie dotyczące korzystania z API użytkowników </h4>
+    <p> Zalecam nałożyć walidację na rejestracji użytkowników, aby nazwa użytkownika była bez spacji, baza danych żądanie przyjmie, jednak nie daję gwarancji że wszystkie funkcje
+    będą działać.</p>
+</article>
+
+<article>
+    <h3> Zarządzanie quizami </h3>
+    <p> Całe API do zarządzania pytaniami znajdziemy na ścieżce /api/, pełny adres: <span class="endpoints" > localhost:8080/api/{nazwa endpointu} </span>  </p>
+    <h4> Pobieranie z bazy danych wszystkich pytań z jednej kolekcji </h4>
+    <p> Aby pobrać całą kolekcję pytań z jednego quizu musisz wejść na endpoint /getCollection, cała ścieżka <span class="endpoints"> localhost:8080/api/getCollection </span>
+    Wymagane jest body dla żądania, które powinno wyglądać w ten sposób:
+    </p>
+    <div class="code">
+        <p>
+            {<br>
+            questionCollection:[nazwa_kolekcji_pytań]<br>
+            }
+        </p>
+    </div>
+    <p> Żądanie działa na metodzie HTTP GET, zwraca tylko listę pytań, bez kodu i wiadomości </p>
+
+    <h4> Dodawanie pytań </h4>
+    <p> Aby dodać pytanie do bazy danych musisz wejść na endpoint /add, cała ścieżka <span class="endpoints"> localhost:8080/api/add </span> </p>
+    <p> Żądanie działa na metodzie POST, i wymaga następującego body: </p>
+    <div class="code">
+    <p>
+        {<br>
+        collectionName:[nazwa kolekcji],<br>
+        questionContent:[treść pytania],<br>
+        correctAnswer:[poprawna odpowiedź],<br>
+        otherAnswers:[lista TRZECH innych odpowiedzi] <br>
+        }
+    </p>
+    </div>
+    <p> Do dodawania pytań potrzebne jest uprawnienie question:write które posiada ranga administrator i quizadmin </p>
+
+    <h4> Usuwanie pytania </h4>
+    <p> Aby usunąć pytanie musisz wejść na endpoint /delete, pełna ścieżka: <span class="endpoints"> localhost:8080/api/{questionID}/delete </span> </p>
+    <p> Wartością questionID jest ID pytania, które możesz zobaczyć bezpośrednio w bazie danych, lub przy pobieraniu pytania przy pomocy innego endpointu
+    w MongoDB ID jest najczęściej ciągiem znaków np.: 62160d66ee396b3853d5e5ad
+    </p>
+    <p> Usunięcie pytania wymaga uprawnienia question:write </p>
+
+    <h4> Zmiana zawartości pytania </h4>
+    <p> Aby zmienić zawartość pytania musisz wejść na endpoint /change, pełna ścieżka: <span class="endpoints"> localhost:8080/api/{questionID}/change </span>  </p>
+    <p> Zmiana zawartości pytania działa na metodzie POST, która wymaga takiego samego body jak dodanie pytania, czyli: </p>
+    <div class="code">
+        <p>
+            {<br>
+            collectionName:[nazwa kolekcji],<br>
+            questionContent:[treść pytania],<br>
+            correctAnswer:[poprawna odpowiedź],<br>
+            otherAnswers:[lista TRZECH innych odpowiedzi] <br>
+            }
+        </p>
+    </div>
+    <p> Endpoint ten zostawi ID pytania, jednak będziesz mógł zmienić dowolny jego element, np. jedną z odpowiedzi lub nazwę kolekcji pytań. Zmiana zawartości wymaga
+    uprawnienia question:write</p>
+
+    <h4> Losowanie pytania </h4>
+    <p> Aby wylosować pytanie musisz wejść na endpoint /randomQuestion, pełna ścieżka: <span class="endpoints"> localhost:8080/api/randomQuestion </span> </p>
+    <p> Żądanie działa na metodzie GET, uprawnienia do niej ma każdy zarejestrowany użytkownik, ponieważ wymaga uprawnienia question:read </p>
+
+</article>
+
+</body>
+</html>
